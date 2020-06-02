@@ -1215,11 +1215,12 @@ function course_delete_module($cmid, $async = false) {
 
     // Delete associated LTI shared tool enrol.
     if (enrol_is_enabled('lti')) {
-        $instanceid = $DB->get_field('enrol_lti_tools', 'enrolid', array('contextid' => $modcontext->id), MUST_EXIST);
-        $instance = $DB->get_record('enrol', array('id' => $instanceid), '*', MUST_EXIST);
-        $ltiplugin = enrol_get_plugin('lti');
-        if ($ltiplugin->can_delete_instance($instance)) {
-            $ltiplugin->delete_instance($instance);
+        if ($instanceid = $DB->get_field('enrol_lti_tools', 'enrolid', array('contextid' => $modcontext->id))) {
+            $instance = $DB->get_record('enrol', array('id' => $instanceid), '*', MUST_EXIST);
+            $ltiplugin = enrol_get_plugin('lti');
+            if ($ltiplugin->can_delete_instance($instance)) {
+                $ltiplugin->delete_instance($instance);
+            }
         }
     }
 
